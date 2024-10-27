@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario de Tienda</title>
+    <script src="2.js" defer></script>
+    <script src="script.js" defer></script> <!-- Enlaza el archivo JavaScript -->
+ <!-- Enlaza el segundo archivo JavaScript -->
+    <link rel="stylesheet" href="pag1style.css"> <!-- Enlaza el archivo CSS -->
+</head>
+<body>
+<h1>Consultar Inventario</h1>
+
+<a href="index.htm" class="back-button">&#8592; Atrás</a> <!-- Botón de atrás -->
+
+<div>
+    <label for="storeIdDropdown">Selecciona una tienda:</label>
+    <select id="storeIdDropdown">
+        <option value="">Selecciona una tienda</option>
+        <!-- Las opciones se llenarán dinámicamente desde JavaScript -->
+    </select>
+    <button onclick="fetchInventory()">Consultar Inventario</button>
+</div>
+
+<!-- Contenido de la nueva página se generará dinámicamente -->
+<div id="inventoryContent"></div> <!-- Nuevo contenedor para el inventario -->
+
+</body>
+</html>

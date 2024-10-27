@@ -1,0 +1,57 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column; /* Cambiado a columna para alinear el título y los botones verticalmente */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    margin-bottom: 20px; /* Espacio debajo del título */
+    color: #ca643c;
+}
+
+.button-container {
+    text-align: center;
+}
+
+.button {
+    display: inline-block;
+    padding: 15px 30px;
+    margin: 10px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #ca643c;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo básico para tablas */
+table {
+    width: 100%; /* Ocupa el 100% del ancho del contenedor */
+    border-collapse: collapse; /* Colapsa los bordes */
+}
+
+th, td {
+    border: 1px solid #dddddd; /* Color de borde claro */
+    text-align: left; /* Alinea el texto a la izquierda */
+    padding: 8px; /* Espaciado interno */
+}
+
+th {
+    background-color: #f2f2f2; /* Color de fondo de las cabeceras */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Color de fondo alternativo para filas pares */
+}
+
