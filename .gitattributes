@@ -1,0 +1,11 @@
+# Clasificar archivos .py como Python
+*.py linguist-language=Python
+
+# Clasificar archivos .htm como HTML
+*.htm linguist-language=HTML
+
+# Clasificar archivos .sql como SQL
+*.sql linguist-language=SQL
+
+# Clasificar archivos .css como CSS
+*.css linguist-language=CSS
