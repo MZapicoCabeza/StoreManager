@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario de Tienda</title>
+    <script src="2.js" defer></script>
+    <script src="script.js" defer></script> <!-- Enlaza el archivo JavaScript -->
+    <link rel="stylesheet" href="pag1style.css"> <!-- Enlaza el archivo CSS -->
+</head>
+<body>
+<h1>Registrar Producto en Inventario</h1>
+<a href="index.htm" class="back-button">&#8592; Atrás</a> <!-- Botón de atrás -->
+
+<div>
+    <label for="storeIdDropdown">Selecciona una tienda:</label>
+    <select id="storeIdDropdown">
+        <option value="">Selecciona una tienda</option>
+    </select>
+</div>
+
+<!-- Formulario para registrar el producto -->
+<form onsubmit="event.preventDefault(); registerProduct();">
+    <label for="productName">Nombre del producto:</label>
+    <input type="text" id="productName" required>
+
+    <label for="productCategory">Categoría del producto:</label>
+    <input type="text" id="productCategory" required>
+
+    <label for="productQuantity">Cantidad:</label>
+    <input type="number" id="productQuantity" min="1" required> <!-- Se asegura de que la cantidad sea un número positivo -->
+
+    <label for="productPrice">Precio (€):</label>
+    <input type="number" id="productPrice" step="0.01" min="0" required> <!-- Asegura que el precio no sea negativo -->
+
+    <button type="submit">Registrar Producto</button>
+</form>
+
+<script>
+    // Funciones JavaScript aquí (si es necesario) o puedes mantenerlo en el archivo 2.js
+</script>
+</body>
+</html>

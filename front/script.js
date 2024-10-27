@@ -88,3 +88,58 @@ loadStoreDropdown();
 
 
 
+
+document.addEventListener('DOMContentLoaded', loadStoreDropdown);
+
+// Función para registrar un producto en la tienda seleccionada
+// Función para registrar un producto en la tienda seleccionada
+async function registerProduct() {
+    const nombreTienda = document.getElementById('storeIdDropdown').value;
+    const nombreProducto = document.getElementById('productName').value.trim();
+    const categoria = document.getElementById('productCategory').value.trim();
+    const cantidad = parseInt(document.getElementById('productQuantity').value, 10);
+    const precio = parseFloat(document.getElementById('productPrice').value);
+
+    // Obtener la fecha actual en formato 'dd-mm-yyyy'
+    const fecha = new Date();
+    const fechaAlta = `${fecha.getDate().toString().padStart(2, '0')}-${(fecha.getMonth() + 1).toString().padStart(2, '0')}-${fecha.getFullYear()}`;
+
+    // Validar que todos los campos son obligatorios
+    if (!nombreTienda || !nombreProducto || !categoria || isNaN(cantidad) || isNaN(precio)) {
+        alert('Todos los campos son obligatorios');
+        return;
+    }
+
+    try {
+        // Hacer la llamada a la API para registrar el producto
+        const response = await fetch('http://127.0.0.1:5000/api/registrar_producto', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id_tienda: nombreTienda, // Asegúrate de que este es el ID correcto
+                nombre_producto: nombreProducto,
+                categoria: categoria,
+                fecha_alta: fechaAlta, // Usar el formato correcto
+                cantidad: cantidad,
+                precio: precio
+            })
+        });
+
+        // Verificar la respuesta del servidor
+        if (!response.ok) {
+            const errorData = await response.json(); // Obtén los datos del error
+            console.error('Error desde el servidor:', errorData);
+            alert(`Error: ${errorData.error || 'Error al registrar el producto'}`);
+            return;
+        }
+
+        // Obtener el resultado de la respuesta de la API
+        const result = await response.json();
+        alert(result.message); // Mostrar el mensaje de éxito
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al registrar el producto');
+    }
+}
+
+
