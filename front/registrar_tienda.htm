@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Tiendas</title>
+    <script src="script.js" defer></script> <!-- Enlaza el archivo JavaScript -->
+    <link rel="stylesheet" href="pag1style.css"> <!-- Enlaza el archivo CSS -->
+    <style>
+        #successMessage {
+            display: none; /* Ocultar por defecto */
+            color: green; /* Color del mensaje de éxito */
+            margin-top: 10px; /* Espaciado adicional */
+        }
+
+        #errorMessage {
+            display: none; /* Ocultar por defecto */
+            color: red; /* Color del mensaje de error */
+            margin-top: 10px; /* Espaciado adicional */
+        }
+
+        .container {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="gerente.htm" class="back-text"><span class="triangle"></span></a>
+</div>
+
+<h1>Registrar Tienda</h1>
+
+<div>
+    <label for="storeName">Nombre de la Tienda:</label>
+    <input type="text" id="storeName" placeholder="Nombre de la Tienda" required>
+
+    <label for="storePopulation">Población:</label>
+    <input type="text" id="storePopulation" placeholder="Población" required>
+
+    <label for="storeLocation">Ubicación (opcional):</label>
+    <input type="text" id="storeLocation" placeholder="Ubicación">
+
+    <button id="registerStoreButton">Registrar Tienda</button>
+</div>
+
+<div id="successMessage"></div> <!-- Mensaje de éxito -->
+<div id="errorMessage"></div> <!-- Mensaje de error -->
+
+<script>
+    // Asegúrate de que la función `registerStore` esté definida en script.js
+
+    // Asociar el evento de click al botón de registrar tienda
+    document.getElementById('registerStoreButton').addEventListener('click', async function() {
+        const nombreTienda = document.getElementById('storeName').value.trim();
+        const poblacion = document.getElementById('storePopulation').value.trim();
+        const ubicacion = document.getElementById('storeLocation').value.trim();
+
+        // Validar que todos los campos obligatorios están llenos
+        if (!nombreTienda || !poblacion) {
+            alert('El nombre de la tienda y la población son obligatorios');
+            return;
+        }
+
+        // Llamar a la función registerStore que debería estar en script.js
+        await registerStore(nombreTienda, poblacion, ubicacion);
+    });
+</script>
+
+</body>
+</html>

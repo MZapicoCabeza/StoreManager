@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Ventas</title>
+    <script src="2.js" defer></script>
+    <script src="script.js" defer></script> <!-- Enlaza el archivo JavaScript -->
+    <link rel="stylesheet" href="pag1style.css"> <!-- Enlaza el archivo CSS -->
+    <style>
+        #successMessage {
+            display: none; /* Ocultar por defecto */
+            color: black; /* Cambiar color a negro */
+            margin-top: 10px; /* Espaciado adicional */
+        }
+
+        #errorMessage {
+            display: none; /* Ocultar por defecto */
+            color: red; /* Color del mensaje de error */
+            margin-top: 10px; /* Espaciado adicional */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="gerente.htm" class="back-text"><span class="triangle"></span></a>
+</div>
+
+<h1>Registrar Venta en Tienda</h1>
+
+<!-- Selector de Tienda y Rango de Fechas -->
+<div>
+    <select id="storeIdDropdown" required>
+        <option value="">Selecciona una tienda</option>
+        <!-- Las opciones de tienda se cargarán dinámicamente -->
+    </select>
+    <input type="text" id="startDate" placeholder="Fecha de inicio (dd-mm-yyyy)">
+    <input type="text" id="endDate" placeholder="Fecha de fin (dd-mm-yyyy)">
+    <button id="fetchSalesReportButton">Obtener Informe de Ventas</button>
+</div>
+
+<!-- Contenedor para mostrar el informe de ventas -->
+<div id="salesReportContent"></div>
+
+
+<div id="successMessage"></div> <!-- Mensaje de éxito -->
+<div id="errorMessage"></div> <!-- Mensaje de error -->
+
+<script>
+    // Agregar el evento para registrar la venta
+    document.getElementById('registerSaleButton').addEventListener('click', function() {
+        registerSale(); // Llama a la función para registrar la venta
+    });
+</script>
+
+</body>
+</html>

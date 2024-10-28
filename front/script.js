@@ -1,8 +1,12 @@
-// Selecciona el botón "Administrador" usando su ID
-const adminButton = document.getElementById('adminButton'); // Asegúrate de que este ID exista en tu HTML
-// Agrega un evento al botón para escuchar el clic
+const adminButton = document.getElementById('adminButton');
 adminButton.addEventListener('click', function() {
-    window.location.href = 'admin.htm'; // Redirige a la página de inventario
+    window.location.href = 'admin.htm';
+});
+
+
+const gerenteButton = document.getElementById('gerenteButton');
+adminButton.addEventListener('click', function() {
+    window.location.href = 'gerente.htm';
 });
 
 // Función para hacer la llamada a la API y mostrar el inventario
@@ -199,6 +203,188 @@ async function registerSale() {
     }
 }
 
+document.addEventListener('DOMContentLoaded', loadStoreDropdown);
+
+// Función para registrar una tienda
+async function registerStore() {
+    // Limpiar mensajes anteriores
+    const successMessageDiv = document.getElementById('successMessage');
+    const errorMessageDiv = document.getElementById('errorMessage');
+    successMessageDiv.innerText = ''; // Limpiar el mensaje de éxito
+    successMessageDiv.style.display = 'none'; // Ocultar el mensaje de éxito
+    errorMessageDiv.innerText = ''; // Limpiar el mensaje de error
+    errorMessageDiv.style.display = 'none'; // Ocultar el mensaje de error
+
+    const nombreTienda = document.getElementById('storeName').value.trim();
+    const poblacion = document.getElementById('storePopulation').value.trim();
+    const ubicacion = document.getElementById('storeLocation').value.trim();
+
+    // Validar que todos los campos obligatorios están llenos
+    if (!nombreTienda || !poblacion) {
+        alert('El nombre de la tienda y la población son obligatorios');
+        return;
+    }
+
+    try {
+        // Hacer la llamada a la API para registrar la tienda
+        const response = await fetch('http://127.0.0.1:5000/api/registrar_tienda', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nombre_tienda: nombreTienda,
+                poblacion: poblacion,
+                ubicacion: ubicacion || null // Enviar null si la ubicación está vacía
+            })
+        });
+
+        // Verificar la respuesta del servidor
+        if (response.ok) {
+            const result = await response.json();
+            console.log(result); // Log para verificar el mensaje
+
+            // Mostrar el mensaje de éxito en la página
+            successMessageDiv.innerText = result.message; // Asigna el mensaje de éxito
+            successMessageDiv.style.display = 'block'; // Muestra el mensaje
+        } else {
+            const errorData = await response.json();
+            console.error('Error desde el servidor:', errorData);
+            alert(`Error: ${errorData.error || 'Error al registrar la tienda'}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al registrar la tienda');
+    }
+}
+
+// Asociar el evento de click al botón de registrar tienda
+document.getElementById('registerStoreButton').addEventListener('click', registerStore);
+
 
 // Evento para registrar la venta al hacer clic en el botón
 document.getElementById('registerSaleButton').addEventListener('click', registerSale);
+
+
+// Función para hacer la llamada a la API y mostrar el informe de ventas
+function fetchSalesReport() {
+    const dropdown = document.getElementById('storeIdDropdown');
+    const nombreTienda = dropdown.value;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+
+    // Validar los campos
+    if (!nombreTienda || !startDate || !endDate) {
+        alert("Por favor, completa todos los campos.");
+        return;
+    }
+
+    fetch(`http://127.0.0.1:5000/api/informe_ventas?nombre_tienda=${encodeURIComponent(nombreTienda)}&fecha_inicio=${encodeURIComponent(startDate)}&fecha_fin=${encodeURIComponent(endDate)}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la llamada a la API');
+            }
+            return response.json();
+        })
+        .then(data => {
+            displaySalesReport(data);
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+            document.getElementById('salesReportContent').innerHTML = `<h1>Error al obtener el informe de ventas: ${error.message}</h1>`;
+        });
+}
+
+// Función para mostrar el informe de ventas en una tabla
+// Función para hacer la llamada a la API y mostrar el informe de ventas
+function fetchSalesReport() {
+    const dropdown = document.getElementById('storeIdDropdown');
+    const nombreTienda = dropdown.value;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+
+    // Validar los campos
+    if (!nombreTienda || !startDate || !endDate) {
+        alert("Por favor, completa todos los campos.");
+        return;
+    }
+
+    fetch(`http://127.0.0.1:5000/api/informe_ventas?nombre_tienda=${encodeURIComponent(nombreTienda)}&fecha_inicio=${encodeURIComponent(startDate)}&fecha_fin=${encodeURIComponent(endDate)}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la llamada a la API');
+            }
+            return response.json();
+        })
+        .then(data => {
+            displaySalesReport(data);
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+            document.getElementById('salesReportContent').innerHTML = `<h1>Error al obtener el informe de ventas: ${error.message}</h1>`;
+        });
+}
+
+// Función para mostrar el informe de ventas en una tabla
+function displaySalesReport(data) {
+    const salesReportContent = document.getElementById('salesReportContent');
+    salesReportContent.innerHTML = '';
+    salesReportContent.style.display = 'block';
+
+    if (data && data.ventas && data.ventas.length > 0) {
+        const h4 = document.createElement('h4');
+        h4.textContent = `Informe de ventas para la tienda: ${data.nombre_tienda} desde ${data.fecha_inicio} hasta ${data.fecha_fin}`;
+        h4.style.color = '#ffffff';
+        h4.style.marginTop = '20px';
+        salesReportContent.appendChild(h4);
+
+        const table = document.createElement('table');
+        table.classList.add('sales-report-table');
+
+        // Crear encabezados de tabla
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        const headerDate = document.createElement('th');
+        headerDate.textContent = 'Fecha';
+        const headerProduct = document.createElement('th');
+        headerProduct.textContent = 'Producto';
+        const headerQuantity = document.createElement('th');
+        headerQuantity.textContent = 'Cantidad Vendida';
+
+        headerRow.appendChild(headerDate);
+        headerRow.appendChild(headerProduct);
+        headerRow.appendChild(headerQuantity);
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // Llenar la tabla con los datos de ventas
+        const tbody = document.createElement('tbody');
+        data.ventas.forEach(venta => {
+            venta.detalles.forEach(detalle => {
+                const row = document.createElement('tr');
+
+                const dateCell = document.createElement('td');
+                dateCell.textContent = venta.fecha;
+
+                const productCell = document.createElement('td');
+                productCell.textContent = detalle.producto;
+
+                const quantityCell = document.createElement('td');
+                quantityCell.textContent = detalle.cantidad;
+
+                row.appendChild(dateCell);
+                row.appendChild(productCell);
+                row.appendChild(quantityCell);
+                tbody.appendChild(row);
+            });
+        });
+        table.appendChild(tbody);
+        salesReportContent.appendChild(table);
+    } else {
+        const noDataMessage = document.createElement('h1');
+        noDataMessage.textContent = 'No se encontraron datos para el rango de fechas proporcionado.';
+        noDataMessage.classList.add('text-black');
+        salesReportContent.appendChild(noDataMessage);
+    }
+}
+
+// Evento para cargar el informe de ventas al hacer clic en el botón
+document.getElementById('fetchSalesReportButton').addEventListener('click', fetchSalesReport);
