@@ -9,8 +9,13 @@
     <link rel="stylesheet" href="pag1style.css"> <!-- Enlaza el archivo CSS -->
 </head>
 <body>
+
+<div class="container">
+    <a href="admin.htm" class="back-text"><span class="triangle"></span></a>
+</div>
+ <!-- Texto "Atrás" con triángulo -->
+
 <h1>Registrar Producto en Inventario</h1>
-<a href="index.htm" class="back-button">&#8592; Atrás</a> <!-- Botón de atrás -->
 
 <div>
     <label for="storeIdDropdown">Selecciona una tienda:</label>
@@ -18,7 +23,7 @@
         <option value="">Selecciona una tienda</option>
     </select>
 </div>
-
+<p>                                                   </p>
 <!-- Formulario para registrar el producto -->
 <form onsubmit="event.preventDefault(); registerProduct();">
     <label for="productName">Nombre del producto:</label>
@@ -35,9 +40,9 @@
 
     <button type="submit">Registrar Producto</button>
 </form>
+<div id="successMessage" style="display: none;"></div> <!-- Mensaje de éxito -->
+<div id="errorMessage" style="display: none;"></div> <!-- Mensaje de error -->
 
-<script>
-    // Funciones JavaScript aquí (si es necesario) o puedes mantenerlo en el archivo 2.js
-</script>
 </body>
 </html>
+

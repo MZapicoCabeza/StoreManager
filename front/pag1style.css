@@ -1,59 +1,90 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: white; /* Color de fondo */
-    color: white; /* Color del texto */
+    background-color: #f5f5f5; /* Color de fondo suave */
+    color: #333; /* Color del texto principal */
     margin: 0;
-    padding: 20px;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    position: relative;
+    justify-content: center; /* Centrar verticalmente */
+    align-items: center; /* Centrar horizontalmente */
+    height: 100vh; /* Altura total de la ventana */
 }
 
-/* Encabezados (dejan el color como está) */
 h1 {
-    color: #ca643c; /* Color del título */
+    color: #4b8b3b; /* Color del título en verde */
     margin-bottom: 20px;
 }
 
+.button-container {
+    display: flex;
+    flex-direction: column; /* Disposición en columna para los botones */
+    align-items: center; /* Centrar botones horizontalmente */
+    margin-bottom: 30px;
+    text-decoration: none; /* Quita el subrayado */
+    color: inherit; /* Hereda el color del texto del contenedor (puedes cambiar esto a un color específico) */
+    margin-right: 15px; /* Espaciado entre enlaces (opcional) */
+}
+.button {
+    background-color: #4b8b3b; /* Color verde para el botón */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%; /* Ajustar el ancho de los botones */
+    max-width: 200px; /* Ancho máximo para los botones */
+    margin: 10px 0; /* Espaciado entre los botones */
+    text-decoration: none; /* Quita el subrayado */
+}
+
+.button:hover {
+    background-color: #3a7028; /* Verde más oscuro al pasar el ratón */
+}
+
+
+
+
 h3 {
-    color: #ca643c; /* Color del subtítulo */
+    color: #4b8b3b; /* Color del subtítulo en verde */
     margin-bottom: 20px;
 }
 
 /* Contenedor de formulario */
 div {
-    background-color: #db864d; /* Fondo del contenedor */
+    background-color: #ffffff; /* Fondo blanco para el contenedor */
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra más suave */
     width: 300px;
     text-align: center;
 }
 
-/* Estilo para etiquetas de formulario en color negro */
+/* Estilo para etiquetas de formulario en color gris oscuro */
 label {
     display: block;
     margin-bottom: 10px;
     font-weight: bold;
-    color: black; /* Cambia el color del texto de las etiquetas a negro */
+    color: #333; /* Color gris oscuro */
 }
 
 /* Estilos de campo de entrada de texto */
 input[type="text"], input[type="number"] {
     width: 270px;
     padding: 7px;
-    border: 1px solid #a1a67d;
+    border: 1px solid #a1a67d; /* Borde en gris claro */
     border-radius: 5px;
     margin-bottom: 10px;
-    background-color: white;
+    background-color: #f9f9f9; /* Fondo claro para inputs */
     font-size: 16px;
-    color: black; /* Cambia el color del texto de los inputs a negro */
+    color: #333; /* Color del texto de los inputs */
 }
 
 /* Estilo de botón */
 button {
-    background-color: #ca643c;
+    background-color: #4b8b3b; /* Color verde para el botón */
     color: white;
     border: none;
     border-radius: 5px;
@@ -65,7 +96,7 @@ button {
 }
 
 button:hover {
-    background-color: #db864d;
+    background-color: #3a7028; /* Verde más oscuro al pasar el ratón */
 }
 
 /* Estilos de la tabla */
@@ -73,7 +104,7 @@ button:hover {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: #db864d;
+    background-color: #ffffff; /* Fondo blanco para la tabla */
     border-radius: 10px;
     overflow: hidden;
 }
@@ -81,24 +112,24 @@ button:hover {
 .inventory-table th, .inventory-table td {
     padding: 12px;
     text-align: left;
-    border: 1px solid #ca643c;
+    border: 1px solid #dcdcdc; /* Borde gris claro */
 }
 
 .inventory-table th {
-    background-color: #ca643c;
+    background-color: #4b8b3b; /* Fondo verde para encabezados */
     color: white;
 }
 
 .inventory-table tr:nth-child(even) {
-    background-color: #f9d09f;
+    background-color: #e7f3e7; /* Color de fondo claro para filas pares */
 }
 
 .inventory-table tr:nth-child(odd) {
-    background-color: #fab88c;
+    background-color: #f2f2f2; /* Color de fondo gris claro para filas impares */
 }
 
 .inventory-table td {
-    color: white;
+    color: #333; /* Color del texto de la tabla en gris oscuro */
 }
 
 .text-black {
@@ -110,21 +141,76 @@ button:hover {
     margin-top: 20px;
 }
 
-.button {
-    display: inline-block;
-    padding: 10px 20px;
-    color: white;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: background-color 0.3s;
-    background-color: #ca643c;
-    border: none;
-    text-decoration: none;
-    cursor: pointer;
-    width: 82%;
-    margin-top: 10px;
+.questionnaire-container {
+    margin-top: 40px; /* Ajusta según lo que necesites */
+}
+.back-button {
+    display: inline-block; /* Para poder aplicar el ancho y el alto */
+    background-color: #4b8b3b; /* Color de fondo verde */
+    color: white; /* Color del texto */
+    text-align: center; /* Centra el texto */
+    padding: 10px 20px; /* Espaciado alrededor del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    position: relative; /* Para posicionar el triángulo */
+    text-decoration: none; /* Sin subrayado */
+    font-weight: bold; /* Texto en negrita */
 }
 
-.button:hover {
-    background-color: #db864d;
+/* Crear el triángulo apuntando a la izquierda */
+.back-button::before {
+    content: ''; /* Necesario para crear un pseudo-elemento */
+    position: absolute; /* Posiciona el triángulo */
+    left: -15px; /* Ajusta la posición a la izquierda */
+    top: 50%; /* Centra verticalmente */
+    transform: translateY(-50%); /* Ajusta verticalmente */
+    border-top: 10px solid transparent; /* Parte superior del triángulo */
+    border-bottom: 10px solid transparent; /* Parte inferior del triángulo */
+    border-right: 10px solid #4b8b3b; /* Color del triángulo */
+}
+
+.back-text {
+    color: #4b8b3b; /* Color del texto en verde */
+    text-decoration: none; /* Sin subrayado */
+    font-weight: bold; /* Texto en negrita */
+    font-size: 16px; /* Tamaño de fuente */
+    margin-top: 0px; /* Espacio superior para separar del contenido */
+    display: inline-block; /* Para que el margin-top funcione */
+}
+
+.container {
+    position: absolute; /* o fixed, según tus necesidades */
+    top: 0; /* Alinea a la parte superior */
+    left: 0; /* Alinea a la izquierda */
+    padding: 5px 10px; /* Reduce el padding a 5px arriba y abajo, 10px a los lados */
+    background-color: transparent; /* Sin fondo */
+    width: 10px; /* Tamaño automático */
+    height: 20px; /* Tamaño automático */
+}
+
+.triangle {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent; /* Parte superior del triángulo */
+    border-bottom: 5px solid transparent; /* Parte inferior del triángulo */
+    border-right: 10px solid #4b8b3b; /* Color del triángulo apuntando a la izquierda */
+}
+
+#successMessage {
+    display: none;
+    color: green;
+    border: 2px solid green;
+    background-color: #d4edda; /* Fondo verde claro */
+    padding: 10px;
+    margin: 10px 0;
+}
+
+#errorMessage {
+    display: none;
+    color: red;
+    border: 2px solid red;
+    background-color: #f8d7da; /* Fondo rojo claro */
+    padding: 10px;
+    margin: 10px 0;
 }

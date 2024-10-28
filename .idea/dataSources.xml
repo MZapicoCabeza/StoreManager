@@ -1,25 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="identifier.sqlite" uuid="b3fb8464-a800-492f-a311-ec350b500bbe">
+    <data-source source="LOCAL" name="FIS2425-PL31.db" uuid="394ead61-4d97-4332-a0b1-16bad343dc6b">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:identifier.sqlite</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="schema.sql" uuid="c9794b20-a0bb-48a9-b1b5-fe62a42e88ac">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/src/resources/schema.sql</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="FIS2425-PL31.db" uuid="f1d5db7b-4c37-4879-900f-f9e70bb0c34f">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/../FIS2024-PL31/FIS2425-PL31.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/src/FIS2425-PL31.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

@@ -90,9 +90,6 @@ loadStoreDropdown();
 
 
 document.addEventListener('DOMContentLoaded', loadStoreDropdown);
-
-// Función para registrar un producto en la tienda seleccionada
-// Función para registrar un producto en la tienda seleccionada
 async function registerProduct() {
     const nombreTienda = document.getElementById('storeIdDropdown').value;
     const nombreProducto = document.getElementById('productName').value.trim();
@@ -110,36 +107,98 @@ async function registerProduct() {
         return;
     }
 
+    // Validar que la cantidad no sea negativa
+    if (cantidad < 0) {
+        alert('La cantidad no puede ser negativa');
+        return;
+    }
+
     try {
         // Hacer la llamada a la API para registrar el producto
         const response = await fetch('http://127.0.0.1:5000/api/registrar_producto', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                id_tienda: nombreTienda, // Asegúrate de que este es el ID correcto
+                nombre_tienda: nombreTienda,
                 nombre_producto: nombreProducto,
                 categoria: categoria,
-                fecha_alta: fechaAlta, // Usar el formato correcto
+                fecha_alta: fechaAlta,
                 cantidad: cantidad,
                 precio: precio
             })
         });
 
         // Verificar la respuesta del servidor
-        if (!response.ok) {
-            const errorData = await response.json(); // Obtén los datos del error
+        if (response.ok) {
+            const result = await response.json();
+            console.log(result); // Log para verificar el mensaje
+
+            // Mostrar el mensaje de éxito en la página
+            const successMessageDiv = document.getElementById('successMessage');
+            successMessageDiv.innerText = result.message; // Asigna el mensaje de éxito
+            successMessageDiv.style.display = 'block'; // Muestra el mensaje
+        } else {
+            const errorData = await response.json();
             console.error('Error desde el servidor:', errorData);
             alert(`Error: ${errorData.error || 'Error al registrar el producto'}`);
-            return;
         }
-
-        // Obtener el resultado de la respuesta de la API
-        const result = await response.json();
-        alert(result.message); // Mostrar el mensaje de éxito
     } catch (error) {
         console.error('Error:', error);
         alert('Error al registrar el producto');
     }
 }
+async function registerSale() {
+    // Limpiar mensajes anteriores
+    const successMessageDiv = document.getElementById('successMessage');
+    const errorMessageDiv = document.getElementById('errorMessage');
+    successMessageDiv.innerText = ''; // Limpiar el mensaje de éxito
+    successMessageDiv.style.display = 'none'; // Ocultar el mensaje de éxito
+
+    errorMessageDiv.innerText = ''; // Limpiar el mensaje de error
+    errorMessageDiv.style.display = 'none'; // Ocultar el mensaje de error
+
+    const nombreTienda = document.getElementById('storeIdDropdown').value;
+    const nombreProducto = document.getElementById('productName').value.trim();
+    const cantidad = parseInt(document.getElementById('productQuantity').value, 10);
+
+    if (!nombreTienda || !nombreProducto || isNaN(cantidad)) {
+        alert('Todos los campos son obligatorios');
+        return;
+    }
+
+    if (cantidad <= 0) {
+        alert('La cantidad debe ser mayor que cero');
+        return;
+    }
+
+    try {
+        const response = await fetch('http://127.0.0.1:5000/api/registrar_venta', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nombre_tienda: nombreTienda,
+                nombre_producto: nombreProducto,
+                cantidad_vendida: cantidad
+            })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // Mostrar mensaje de éxito
+            successMessageDiv.innerText = result.mensaje; // Asigna el mensaje de éxito
+            successMessageDiv.style.display = 'block'; // Muestra el mensaje
+        } else {
+            // Mostrar mensaje de error
+            errorMessageDiv.innerText = result.error; // Asigna el mensaje de error
+            errorMessageDiv.style.display = 'block'; // Muestra el mensaje
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al registrar la venta');
+    }
+}
 
 
+// Evento para registrar la venta al hacer clic en el botón
+document.getElementById('registerSaleButton').addEventListener('click', registerSale);
