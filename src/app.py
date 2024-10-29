@@ -221,7 +221,7 @@ def registrar_tienda():
 
     # Validar que todos los campos obligatorios estén presentes
     if not nombre_tienda or not poblacion:
-        return jsonify({"error": "El nombre de la tienda y la población son obligatorios"}), 400
+        return jsonify({"error": "El nombre de la tienda y la población son obligatorios"}), 200
 
     # Mostrar los datos que se cargarán
     print("\n>> Datos a registrar:")
@@ -246,20 +246,26 @@ def informe_ventas():
     nombre_tienda = request.args.get('nombre_tienda')
     fecha_inicio_str = request.args.get('fecha_inicio')
     fecha_fin_str = request.args.get('fecha_fin')
+    print(nombre_tienda)
+    print(fecha_inicio_str)
+    print(fecha_fin_str)
 
     # Validación de los parámetros
     if not nombre_tienda or not fecha_inicio_str or not fecha_fin_str:
-        return jsonify(
-            {'error': 'Todos los parámetros (nombre_tienda, fecha_inicio, fecha_fin) son obligatorios.'}), 400
+        return jsonify({'error': 'Todos los parámetros (nombre_tienda, fecha_inicio, fecha_fin) son obligatorios.'}), 400
+
+    # Validar que el nombre de la tienda no esté vacío y sea un string
+    if not isinstance(nombre_tienda, str) or not nombre_tienda.strip():
+        return jsonify({'error': 'El nombre de la tienda debe ser un texto válido.'}), 400
 
     try:
         # Convertir las fechas al formato de objetos date
-        fecha_inicio = datetime.strptime(fecha_inicio_str, '%d-%m-%Y').date()
-        fecha_fin = datetime.strptime(fecha_fin_str, '%d-%m-%Y').date()
+        fecha_inicio = datetime.strptime(fecha_inicio_str, '%Y-%m-%d').date()
+        fecha_fin = datetime.strptime(fecha_fin_str, '%Y-%m-%d').date()
         if fecha_fin < fecha_inicio:
             return jsonify({'error': 'La fecha de fin no puede ser anterior a la fecha de inicio.'}), 400
     except ValueError:
-        return jsonify({'error': 'Formato de fecha incorrecto. Utilice dd-mm-yyyy.'}), 400
+        return jsonify({'error': 'Formato de fecha incorrecto. Utilice YYYY-MM-DD.'}), 400
 
     # Convertir las fechas a formato adecuado para SQLite
     fecha_inicio_sql = fecha_inicio.strftime('%Y-%m-%d')
@@ -270,44 +276,56 @@ def informe_ventas():
     cursor = conn.cursor()
 
     # Buscar el ID de la tienda usando el nombre
-    cursor.execute("SELECT id_tienda FROM Tienda WHERE nombre = ?", (nombre_tienda,))
-    tienda = cursor.fetchone()
+    try:
+        cursor.execute("SELECT id_tienda FROM Tienda WHERE nombre = ?", (nombre_tienda,))
+        tienda = cursor.fetchone()
+    except sqlite3.Error as e:
+        conn.close()
+        return jsonify({'error': f'Error al acceder a la base de datos: {str(e)}'}), 500
 
     if tienda is None:
         conn.close()
-        return jsonify({'error': f"No se encontró una tienda con el nombre '{nombre_tienda}'."}), 404
+        return jsonify({'error': f"No se encontró una tienda con el nombre '{nombre_tienda}'."}), 400
 
     tienda_id = tienda['id_tienda']
 
     # Consultar las ventas para el ID de tienda y el rango de fechas
-    cursor.execute("""
-        SELECT V.fecha, V.productos, V.cantidad_vendida
-        FROM Venta V
-        WHERE V.id_tienda = ? AND V.fecha BETWEEN ? AND ?
-        ORDER BY V.fecha ASC;
-    """, (tienda_id, fecha_inicio_sql, fecha_fin_sql))
+    try:
+        cursor.execute("""
+            SELECT V.fecha, V.productos, V.cantidad_vendida
+            FROM Venta V
+            WHERE V.id_tienda = ? AND V.fecha BETWEEN ? AND ?
+            ORDER BY V.fecha ASC;
+        """, (tienda_id, fecha_inicio_sql, fecha_fin_sql))
 
-    ventas = cursor.fetchall()
+        ventas = cursor.fetchall()
+    except sqlite3.Error as e:
+        conn.close()
+        return jsonify({'error': f'Error al realizar la consulta de ventas: {str(e)}'}), 400
+
     conn.close()
 
     # Si no hay ventas en el rango de fechas
     if not ventas:
         return jsonify({
             'mensaje': f"No hay ventas registradas para la tienda '{nombre_tienda}' en el rango de fechas de {fecha_inicio_str} hasta {fecha_fin_str}."
-        })
+        }), 404  # Cambiar a 404 para reflejar que no hay datos
 
     # Procesar los resultados
     ventas_informe = []
     for venta in ventas:
-        fecha = datetime.strptime(venta['fecha'], '%Y-%m-%d').strftime('%d-%m-%Y')
-        productos = venta['productos'].replace(" ", "").split(",")
-        cantidades = list(map(int, venta['cantidad_vendida'].replace(" ", "").split(",")))
+        try:
+            fecha = datetime.strptime(venta['fecha'], '%Y-%m-%d').strftime('%d-%m-%Y')
+            productos = venta['productos'].replace(" ", "").split(",")
+            cantidades = list(map(int, venta['cantidad_vendida'].replace(" ", "").split(",")))
 
-        detalles_venta = [{'producto': prod, 'cantidad': cant} for prod, cant in zip(productos, cantidades)]
-        ventas_informe.append({
-            'fecha': fecha,
-            'detalles': detalles_venta
-        })
+            detalles_venta = [{'producto': prod, 'cantidad': cant} for prod, cant in zip(productos, cantidades)]
+            ventas_informe.append({
+                'fecha': fecha,
+                'detalles': detalles_venta
+            })
+        except Exception as e:
+            return jsonify({'error': f'Error procesando la venta: {str(e)}'}), 500
 
     return jsonify({
         'nombre_tienda': nombre_tienda,

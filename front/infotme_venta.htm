@@ -4,22 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Ventas</title>
+    <link rel="stylesheet" href="pag1style.css">
     <script src="2.js" defer></script>
-    <script src="script.js" defer></script> <!-- Enlaza el archivo JavaScript -->
-    <link rel="stylesheet" href="pag1style.css"> <!-- Enlaza el archivo CSS -->
-    <style>
-        #successMessage {
-            display: none; /* Ocultar por defecto */
-            color: black; /* Cambiar color a negro */
-            margin-top: 10px; /* Espaciado adicional */
-        }
-
-        #errorMessage {
-            display: none; /* Ocultar por defecto */
-            color: red; /* Color del mensaje de error */
-            margin-top: 10px; /* Espaciado adicional */
-        }
-    </style>
+    <script src="script.js" defer></script> <!-- Enlace al archivo de JavaScript -->
 </head>
 <body>
 
@@ -27,32 +14,48 @@
     <a href="gerente.htm" class="back-text"><span class="triangle"></span></a>
 </div>
 
-<h1>Registrar Venta en Tienda</h1>
+<h1>Registro de Ventas</h1>
 
-<!-- Selector de Tienda y Rango de Fechas -->
-<div>
-    <select id="storeIdDropdown" required>
-        <option value="">Selecciona una tienda</option>
-        <!-- Las opciones de tienda se cargarán dinámicamente -->
-    </select>
-    <input type="text" id="startDate" placeholder="Fecha de inicio (dd-mm-yyyy)">
-    <input type="text" id="endDate" placeholder="Fecha de fin (dd-mm-yyyy)">
-    <button id="fetchSalesReportButton">Obtener Informe de Ventas</button>
+<!-- Formulario para el Registro de Ventas -->
+<form id="salesReportForm" onsubmit="event.preventDefault(); fetchSalesReport();">
+    <!-- Selector de Tienda -->
+    <div>
+        <select id="storeIdDropdown" required>
+            <option value="">Selecciona una tienda</option>
+            <!-- Las opciones de tienda se cargarán dinámicamente -->
+        </select>
+        <p></p>
+
+        <!-- Selectores de fecha -->
+        <label for="startDate">Fecha de inicio:</label>
+        <input type="date" id="startDate" required>
+        <p></p>
+        <label for="endDate">Fecha de fin:</label>
+        <input type="date" id="endDate" required>
+    </div>
+
+    <button type="submit" id="fetchSalesReportButton" class="button">Obtener Informe de Ventas</button>
+</form>
+
+<!-- Contenedor para el informe de ventas -->
+<div id="salesReportContent" style="display: none;">
+    <h3>Informe de Ventas</h3>
+    <table class="inventory-table">
+        <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Detalles de Ventas</th>
+        </tr>
+        </thead>
+        <tbody id="salesReportTableBody">
+        <!-- Aquí se llenarán las filas de la tabla dinámicamente -->
+        </tbody>
+    </table>
 </div>
+<div id="successMessage"></div>
+<div id="errorMessage"></div>
 
-<!-- Contenedor para mostrar el informe de ventas -->
-<div id="salesReportContent"></div>
-
-
-<div id="successMessage"></div> <!-- Mensaje de éxito -->
-<div id="errorMessage"></div> <!-- Mensaje de error -->
-
-<script>
-    // Agregar el evento para registrar la venta
-    document.getElementById('registerSaleButton').addEventListener('click', function() {
-        registerSale(); // Llama a la función para registrar la venta
-    });
-</script>
 
 </body>
 </html>
+

@@ -204,6 +204,8 @@ button:hover {
     background-color: #d4edda; /* Fondo verde claro */
     padding: 10px;
     margin: 10px 0;
+    border-radius: 5px;
+    text-align: center;
 }
 
 #errorMessage {
@@ -213,4 +215,69 @@ button:hover {
     background-color: #f8d7da; /* Fondo rojo claro */
     padding: 10px;
     margin: 10px 0;
+    border-radius: 5px;
+    text-align: center;
+}
+
+
+#successMessage, #errorMessage {
+    display: none;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+#successMessage {
+    color: green;
+    border: 2px solid green;
+    background-color: #d4edda; /* Fondo verde claro */
+}
+
+#errorMessage {
+    color: red;
+    border: 2px solid red;
+    background-color: #f8d7da; /* Fondo rojo claro */
+}
+
+/* Estilos para el contenedor de informe de ventas */
+#salesReportContent {
+    display: none;
+    max-height: 70vh; /* Limita la altura al 70% de la ventana */
+    overflow-y: auto; /* Añade barra de desplazamiento interna si es necesario */
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #ffffff; /* Fondo blanco */
+}
+
+/* Estilos de la tabla */
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff; /* Fondo blanco para la tabla */
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.inventory-table th, .inventory-table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #dcdcdc; /* Borde gris claro */
+}
+
+.inventory-table th {
+    background-color: #4b8b3b; /* Fondo verde para encabezados */
+    color: white;
+}
+
+.inventory-table tr:nth-child(even) {
+    background-color: #e7f3e7; /* Color de fondo claro para filas pares */
+}
+
+.inventory-table tr:nth-child(odd) {
+    background-color: #f2f2f2; /* Color de fondo gris claro para filas impares */
+}
+
+.inventory-table td {
+    color: #333; /* Color del texto de la tabla en gris oscuro */
 }

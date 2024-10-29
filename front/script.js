@@ -42,7 +42,7 @@ function displayData(data) {
     if (data && data.inventario) {
         const h4 = document.createElement('h4');
         h4.textContent = `Inventario para la tienda: ${data.tienda}`;
-        h4.style.color = '#ffffff';
+        h4.style.color = '#4b8b3b';
         h4.style.marginTop = '20px';
         inventoryContent.appendChild(h4);
 
@@ -264,66 +264,49 @@ document.getElementById('registerStoreButton').addEventListener('click', registe
 document.getElementById('registerSaleButton').addEventListener('click', registerSale);
 
 
-// Función para hacer la llamada a la API y mostrar el informe de ventas
-function fetchSalesReport() {
+// Función para mostrar el informe de ventas en una tabla
+async function fetchSalesReport() {
     const dropdown = document.getElementById('storeIdDropdown');
     const nombreTienda = dropdown.value;
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
+    const salesReportContent = document.getElementById('salesReportContent');
+    const successMessage = document.getElementById('successMessage');
+    const errorMessage = document.getElementById('errorMessage');
 
-    // Validar los campos
+    // Ocultar mensajes previos
+    successMessage.style.display = 'none';
+    errorMessage.style.display = 'none';
+    salesReportContent.style.display = 'none';
+
+    // Validar campos requeridos
     if (!nombreTienda || !startDate || !endDate) {
-        alert("Por favor, completa todos los campos.");
+        errorMessage.innerText = "Por favor, completa todos los campos.";
+        errorMessage.style.display = 'block';
         return;
     }
 
-    fetch(`http://127.0.0.1:5000/api/informe_ventas?nombre_tienda=${encodeURIComponent(nombreTienda)}&fecha_inicio=${encodeURIComponent(startDate)}&fecha_fin=${encodeURIComponent(endDate)}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error en la llamada a la API');
-            }
-            return response.json();
-        })
-        .then(data => {
-            displaySalesReport(data);
-        })
-        .catch(error => {
-            console.error('Error:', error.message);
-            document.getElementById('salesReportContent').innerHTML = `<h1>Error al obtener el informe de ventas: ${error.message}</h1>`;
-        });
-}
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/api/informe_ventas?nombre_tienda=${encodeURIComponent(nombreTienda)}&fecha_inicio=${encodeURIComponent(startDate)}&fecha_fin=${encodeURIComponent(endDate)}`);
+        const result = await response.json();
 
-// Función para mostrar el informe de ventas en una tabla
-// Función para hacer la llamada a la API y mostrar el informe de ventas
-function fetchSalesReport() {
-    const dropdown = document.getElementById('storeIdDropdown');
-    const nombreTienda = dropdown.value;
-    const startDate = document.getElementById('startDate').value;
-    const endDate = document.getElementById('endDate').value;
-
-    // Validar los campos
-    if (!nombreTienda || !startDate || !endDate) {
-        alert("Por favor, completa todos los campos.");
-        return;
+        if (response.ok) {
+            // Mostrar mensaje de éxito y cargar el informe de ventas
+            successMessage.innerText = result.mensaje || "Informe de ventas cargado exitosamente.";
+            successMessage.style.display = 'block';
+            displaySalesReport(result);
+        } else {
+            // Mostrar mensaje de error en caso de respuesta no OK
+            errorMessage.innerText = result.error || "Error al cargar el informe de ventas.";
+            errorMessage.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        errorMessage.innerText = 'Error al obtener el informe de ventas.';
+        errorMessage.style.display = 'block';
     }
-
-    fetch(`http://127.0.0.1:5000/api/informe_ventas?nombre_tienda=${encodeURIComponent(nombreTienda)}&fecha_inicio=${encodeURIComponent(startDate)}&fecha_fin=${encodeURIComponent(endDate)}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error en la llamada a la API');
-            }
-            return response.json();
-        })
-        .then(data => {
-            displaySalesReport(data);
-        })
-        .catch(error => {
-            console.error('Error:', error.message);
-            document.getElementById('salesReportContent').innerHTML = `<h1>Error al obtener el informe de ventas: ${error.message}</h1>`;
-        });
 }
 
-// Función para mostrar el informe de ventas en una tabla
 function displaySalesReport(data) {
     const salesReportContent = document.getElementById('salesReportContent');
     salesReportContent.innerHTML = '';
@@ -332,20 +315,21 @@ function displaySalesReport(data) {
     if (data && data.ventas && data.ventas.length > 0) {
         const h4 = document.createElement('h4');
         h4.textContent = `Informe de ventas para la tienda: ${data.nombre_tienda} desde ${data.fecha_inicio} hasta ${data.fecha_fin}`;
-        h4.style.color = '#ffffff';
-        h4.style.marginTop = '20px';
+        h4.style.color = '#4b8b3b';
         salesReportContent.appendChild(h4);
 
         const table = document.createElement('table');
-        table.classList.add('sales-report-table');
+        table.classList.add('inventory-table');
 
-        // Crear encabezados de tabla
         const thead = document.createElement('thead');
         const headerRow = document.createElement('tr');
+
         const headerDate = document.createElement('th');
         headerDate.textContent = 'Fecha';
+
         const headerProduct = document.createElement('th');
         headerProduct.textContent = 'Producto';
+
         const headerQuantity = document.createElement('th');
         headerQuantity.textContent = 'Cantidad Vendida';
 
@@ -355,7 +339,6 @@ function displaySalesReport(data) {
         thead.appendChild(headerRow);
         table.appendChild(thead);
 
-        // Llenar la tabla con los datos de ventas
         const tbody = document.createElement('tbody');
         data.ventas.forEach(venta => {
             venta.detalles.forEach(detalle => {
@@ -379,12 +362,11 @@ function displaySalesReport(data) {
         table.appendChild(tbody);
         salesReportContent.appendChild(table);
     } else {
-        const noDataMessage = document.createElement('h1');
-        noDataMessage.textContent = 'No se encontraron datos para el rango de fechas proporcionado.';
-        noDataMessage.classList.add('text-black');
+        const noDataMessage = document.createElement('div');
+        noDataMessage.innerText = `No hay ventas registradas para la tienda '${data.nombre_tienda}' en el rango de fechas de ${data.fecha_inicio} hasta ${data.fecha_fin}.`;
+        noDataMessage.style.color = 'green';
+        noDataMessage.style.padding = '10px';
+        noDataMessage.style.margin = '10px 0';
         salesReportContent.appendChild(noDataMessage);
     }
 }
-
-// Evento para cargar el informe de ventas al hacer clic en el botón
-document.getElementById('fetchSalesReportButton').addEventListener('click', fetchSalesReport);
